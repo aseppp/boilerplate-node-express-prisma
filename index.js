@@ -6,7 +6,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://my-api-two-lemon.vercel.app"],
   })
 );
 // app.use(morgan.token)
