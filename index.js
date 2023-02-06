@@ -6,7 +6,11 @@ app.use(express.json());
 const router = require("./routes/index");
 app.use("/api", router);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+  })
+);
 app.get("/", (req, res) => {
   res.json("Server working properly!");
 });
