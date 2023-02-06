@@ -8,7 +8,7 @@ app.use("/api", router);
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: "*",
   })
 );
 app.get("/", (req, res) => {
