@@ -7,23 +7,36 @@ exports.signUp = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hasheadPassword = await bcrypt.hash(password, salt);
-    await prisma.user.create({
-      data: {
+    const existUser = await prisma.user.findUnique({
+      where: {
         email: email,
-        password: hasheadPassword,
       },
     });
 
-    res.status(200).send({
-      status: "Success",
-      message: "Sign Up Success",
-      user: {
-        email: email,
-        password: hasheadPassword,
-      },
-    });
+    if (existUser) {
+      res.status(400).send({
+        status: "failed",
+        message: "User already exist",
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hasheadPassword = await bcrypt.hash(password, salt);
+      await prisma.user.create({
+        data: {
+          email: email,
+          password: hasheadPassword,
+        },
+      });
+
+      res.status(200).send({
+        status: "Success",
+        message: "Sign Up Success",
+        user: {
+          email: email,
+          password: hasheadPassword,
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send({
